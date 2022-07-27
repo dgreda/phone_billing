@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Container to use for running the app locally - this would not be a real-world production-ready image!
+  # the real-world app could potentially be deployed via k8s, using load balancer that is listening on the main port
+  # to distribute requests among multiple pods
+  # (and not necessarily using the process manager like gunicorn inside individual container/pod)
+  dev:
+    build:
+      dockerfile: "./docker/python3.9-slim.gunicorn.dockerfile"
+      context: "."
+      args:
+        REQUIREMENTS_FILE: requirements.txt
+    command: uvicorn app.application:app --reload --host 0.0.0.0 --port 8000
+    ports:
+      - 8080:8000
+    volumes:
+      - .:/app
+
+  # Dedicated container for running the test & lint suite
+  test:
+    build:
+      dockerfile: "./docker/python3.9-slim.gunicorn.dockerfile"
+      context: "."
+      args:
+        REQUIREMENTS_FILE: requirements-test.txt
+    command: "test"
+    volumes:
+      - .:/app

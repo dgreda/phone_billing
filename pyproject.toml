@@ -1,0 +1,7 @@
+[tool.black]
+# Anything in .gitignore is automatically excluded. To exclude something that is checked in, use extend-exclude
+line-length = 80
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
