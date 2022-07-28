@@ -1,7 +1,7 @@
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 
-from .containers import AppContainer
+from app.containers import AppContainer
 
 router = APIRouter()
 

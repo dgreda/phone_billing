@@ -5,17 +5,30 @@ services:
   # the real-world app could potentially be deployed via k8s, using load balancer that is listening on the main port
   # to distribute requests among multiple pods
   # (and not necessarily using the process manager like gunicorn inside individual container/pod)
-  dev:
+  dev-api:
     build:
       dockerfile: "./docker/python3.9-slim.gunicorn.dockerfile"
       context: "."
       args:
         REQUIREMENTS_FILE: requirements.txt
+    depends_on:
+      - dev-db
     command: uvicorn app.application:app --reload --host 0.0.0.0 --port 8000
     ports:
       - 8080:8000
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@dev-db:5432/phone_billing
     volumes:
       - .:/app
+
+  dev-db:
+    image: postgres:14.4
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=phone_billing
 
   # Dedicated container for running the test & lint suite
   test:
