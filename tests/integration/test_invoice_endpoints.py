@@ -28,7 +28,7 @@ def test_invoice_creation_end_to_end(client: TestClient) -> None:
         client=client,
         user_id=user_id,
         duration=45,
-        start_datetime=datetime(2022, 7, 31, 17, 59, 0, tzinfo=timezone.utc),
+        start_datetime=datetime(2022, 7, 31, 23, 59, 0, tzinfo=timezone.utc),
     ).json()
 
     # request invoice generation for 7/2022
