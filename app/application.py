@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from app.containers import AppContainer
 from app.db import init_db
-from app.domain.models import PhoneCall, User
+from app.domain.entities import Call, Invoice, User
+from app.domain.exceptions import NotFound
 from app.endpoints import router
 
 
@@ -10,11 +12,20 @@ def create_app() -> FastAPI:
     container = AppContainer()
 
     app = FastAPI()
+    app.container = container  # type: ignore
     app.include_router(router)
     return app
 
 
 app = create_app()
+
+
+@app.exception_handler(NotFound)
+def not_found_exception_handler(request: Request, ex: NotFound):
+    return JSONResponse(
+        status_code=404,
+        content={"error": str(ex)},
+    )
 
 
 @app.on_event("startup")
