@@ -12,7 +12,7 @@ from app.domain.entities.Invoice import Invoice
 from app.domain.entities.InvoiceRead import InvoiceRead
 from app.domain.entities.User import User
 from app.domain.entities.UserRead import UserRead
-from app.domain.repositories import CallRepository, UserRepository
+from app.domain.repositories import CallRepository, InvoiceRepository, UserRepository
 from app.domain.services import InvoiceService
 
 router = APIRouter()
@@ -121,3 +121,14 @@ def create_invoice(
     )
 
     return invoice
+
+
+@router.get("/invoice/{invoice_id}", response_model=InvoiceRead)
+@inject
+def get_invoice(
+    invoice_id: int,
+    invoice_repository: InvoiceRepository = Depends(
+        Provide[AppContainer.invoice_repository]
+    ),
+) -> Invoice:
+    return invoice_repository.find_or_fail(invoice_id)

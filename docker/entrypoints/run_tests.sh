@@ -41,14 +41,14 @@ function run_steps() {
   # The explicit path is used so a single pytest config can be used to unit and integration tests
   eval "pytest tests -vv"
 
-  echo "Running flake8..."
-  # Source discovery is controlled by settings in .flake8
-  eval "flake8"
-
   echo "Running bandit..."
   # Source discovery is controlled by settings in .bandit
   # Explicitly specifying settings file because using a different path will cause the file to be ignored.
   eval "bandit --ini .bandit -rq ."
+
+  echo "Running flake8..."
+  # Source discovery is controlled by settings in .flake8
+  eval "flake8"
 }
 
 run_steps

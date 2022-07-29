@@ -1,12 +1,12 @@
 from app.domain.services.billing import FlatRatePostpaidPlanStrategy
-from tests.unit.fixtures import create_call
+from tests.unit.fixtures import create_call_entity
 
 
 def test_calculate_total() -> None:
     charge_per_minute = 0.02
     tax_rate = 0.1
-    call1 = create_call(20)
-    call2 = create_call(15)
+    call1 = create_call_entity(20)
+    call2 = create_call_entity(15)
 
     strategy = FlatRatePostpaidPlanStrategy(
         tax_rate=tax_rate, charge_per_minute=charge_per_minute

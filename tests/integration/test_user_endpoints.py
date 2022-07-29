@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
 
+from tests.integration.fixtures import create_user, get_user
+
 
 def test_user_not_found(client: TestClient) -> None:
     response = client.get("/user/123")
@@ -9,21 +11,16 @@ def test_user_not_found(client: TestClient) -> None:
 def test_create_and_get_user(client: TestClient) -> None:
     country_code = 1
     number = 123456789
-    response = client.post(
-        "/user", json={"country_code": country_code, "number": number}
-    )
+    response = create_user(client, country_code, number)
     data = response.json()
 
-    assert response.status_code == 201
     assert data["country_code"] == country_code
     assert data["number"] == number
-    assert data["id"] is not None
 
     user_id = data["id"]
 
-    response = client.get(f"/user/{user_id}")
+    response = get_user(client, user_id)
     data = response.json()
 
-    assert response.status_code == 200
     assert data["country_code"] == country_code
     assert data["number"] == number
