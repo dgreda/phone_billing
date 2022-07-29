@@ -1,3 +1,5 @@
+# flake8: noqa
+
 """init
 
 Revision ID: ea261837d6d1

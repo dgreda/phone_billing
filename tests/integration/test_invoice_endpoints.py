@@ -1,9 +1,7 @@
 from datetime import datetime, timezone
 
-import pytest
 from fastapi.testclient import TestClient
 
-from app.domain.exceptions import InvoiceAlreadyExists
 from tests.integration.fixtures import create_call, create_user, get_call, get_invoice
 
 
@@ -56,7 +54,8 @@ def test_invoice_creation_end_to_end(client: TestClient) -> None:
     assert read_call1["invoice_id"] == invoice["id"]
     assert read_call2["invoice_id"] == invoice["id"]
 
-    # verify that it's not possible to create invoice for the same user and billing cycle again
+    # verify that it's not possible to create invoice
+    # for the same user and billing cycle again
     response = client.post(f"user/{user_id}/invoice/2022/7")
     data = response.json()
 

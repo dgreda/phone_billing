@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from logging.config import fileConfig
 
 from alembic import context

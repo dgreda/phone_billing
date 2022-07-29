@@ -12,4 +12,4 @@ class Invoice(InvoiceBase, table=True):
     user_id: int = Field(foreign_key="user.id")
     user: User = Relationship(back_populates="invoices")
     identifier: str = Field(index=True, sa_column=Column(String(), unique=True))
-    calls: List["Call"] = Relationship(back_populates="invoice")  # type: ignore
+    calls: List["Call"] = Relationship(back_populates="invoice")  # type: ignore # noqa

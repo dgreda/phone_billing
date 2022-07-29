@@ -17,6 +17,7 @@ class BillingPlanStrategyInterface(ABC):
         """
         Interface method that individual billing plan strategies must implement.
         Example billing plans might be prepaid, postpaid, fixed_amount, etc.
-        :param calls: List of Call entities, for which the strategy has to calculate total amount to charge
+        :param calls: List of Call entities, for which the strategy
+            has to calculate total amount to charge
         :return float: The total charge (including taxes)
         """

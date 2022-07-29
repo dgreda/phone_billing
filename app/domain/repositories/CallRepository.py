@@ -48,7 +48,7 @@ class CallRepository(AbstractRepository):
         return self.session.exec(
             select(Call)
             .where(Call.user_id == user.id)
-            .where(Call.invoice_id == None)
+            .where(Call.invoice_id == None)  # noqa
             .where(Call.start_datetime_iso_8601 >= start_timestamp)
             .where(Call.end_datetime_iso_8601 <= end_timestamp)
         ).all()
