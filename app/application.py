@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from app.containers import AppContainer
 from app.db import init_db
 from app.domain.entities import Call, Invoice, User
-from app.domain.exceptions import NotFound
+from app.domain.exceptions import NotFound, NotUniqueError
 from app.endpoints import router
 
 
@@ -24,6 +24,14 @@ app = create_app()
 def not_found_exception_handler(request: Request, ex: NotFound):
     return JSONResponse(
         status_code=404,
+        content={"error": str(ex)},
+    )
+
+
+@app.exception_handler(NotUniqueError)
+def not_unique_error_exception_handler(request: Request, ex: NotUniqueError):
+    return JSONResponse(
+        status_code=409,
         content={"error": str(ex)},
     )
 

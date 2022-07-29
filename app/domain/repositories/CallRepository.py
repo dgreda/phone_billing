@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from sqlmodel import select
@@ -40,3 +41,14 @@ class CallRepository(AbstractRepository):
         call = self.persist(call)
 
         return call
+
+    def find_not_invoiced_calls(
+        self, user: User, start_timestamp: datetime, end_timestamp: datetime
+    ) -> List[Call]:
+        return self.session.exec(
+            select(Call)
+            .where(Call.user_id == user.id)
+            .where(Call.invoice_id == None)
+            .where(Call.start_datetime_iso_8601 >= start_timestamp)
+            .where(Call.end_datetime_iso_8601 <= end_timestamp)
+        ).all()

@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TypeVar
+from typing import List, TypeVar
 
 import sqlmodel
 
@@ -16,3 +16,14 @@ class AbstractRepository(ABC):
         self.session.refresh(entity)
 
         return entity
+
+    def persist_all(self, entities: List[T]) -> List[T]:
+        for entity in entities:
+            self.session.add(entity)
+
+        self.session.commit()
+
+        for entity in entities:
+            self.session.refresh(entity)
+
+        return entities

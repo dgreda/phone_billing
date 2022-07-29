@@ -1,2 +1,6 @@
 default:
-  greeting: "Hello World!"
+  tax_rate: 0.08
+
+billing:
+  postpaid:
+    charge_per_minute: 0.02

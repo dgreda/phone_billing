@@ -8,9 +8,12 @@ from app.domain.entities.Call import Call
 from app.domain.entities.CallRead import CallRead
 from app.domain.entities.CreateCallRequest import CreateCallRequest
 from app.domain.entities.CreateUserRequest import CreateUserRequest
+from app.domain.entities.Invoice import Invoice
+from app.domain.entities.InvoiceRead import InvoiceRead
 from app.domain.entities.User import User
 from app.domain.entities.UserRead import UserRead
 from app.domain.repositories import CallRepository, UserRepository
+from app.domain.services import InvoiceService
 
 router = APIRouter()
 
@@ -91,3 +94,30 @@ def create_phone_call(
     call = call_repository.persist_call(request, user)
 
     return call
+
+
+@router.post(
+    "/user/{user_id}/invoice/{year}/{month}",
+    status_code=201,
+    response_model=InvoiceRead,
+)
+@inject
+def create_invoice(
+    user_id: int,
+    year: int,
+    month: int = Query(gte=1, lte=12),
+    invoice_service: InvoiceService = Depends(
+        Provide[AppContainer.invoice_service]
+    ),
+    user_repository: UserRepository = Depends(
+        Provide[AppContainer.user_repository]
+    ),
+) -> Invoice:
+    user = user_repository.find_or_fail(user_id)
+    invoice = invoice_service.bill_and_create_invoice(
+        user=user,
+        billing_year=year,
+        billing_month=month,
+    )
+
+    return invoice
