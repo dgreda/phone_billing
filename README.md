@@ -89,3 +89,18 @@ If it has to be working globally, in order to offer best and reliable experience
 properly according to their actual timezone (well, at least the official country / number timezone),
 as opposed to what the system is doing currently (working with Timezone aware timestamps,
 but assuming UTC timestamps filtering for the invoice generation).
+
+
+## Additional task
+
+### Describe how you would extend the solution to be able to support different billing plans like prepaid and fixed amount per month
+
+This is actually outlined to some extent in the codebase - I have introduced a strategy pattern
+and one existing strategy currently implemented is `FlatRatePostpaidPlanStrategy`
+which calculates the total charge based on a flat rate as postpaid (as requested in the task requirements).
+
+By implementing the interface `BillingPlanStrategyInterface`,
+we can add more different billing strategies without modifying the core logic of `InvoiceService`.
+
+The billing strategy is now application-wide, but it would make sense that different users
+might be on different billing plans and require different billing strategies at runtime.
