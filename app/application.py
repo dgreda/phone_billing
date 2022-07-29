@@ -2,8 +2,6 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.containers import AppContainer
-from app.db import init_db
-from app.domain.entities import Call, Invoice, User
 from app.domain.exceptions import NotFound, NotUniqueError
 from app.endpoints import router
 
@@ -34,8 +32,3 @@ def not_unique_error_exception_handler(request: Request, ex: NotUniqueError):
         status_code=409,
         content={"error": str(ex)},
     )
-
-
-@app.on_event("startup")
-def on_startup():
-    init_db()
